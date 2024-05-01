@@ -1,0 +1,17 @@
+3 main data struct
+BST organized by song title
+	playlist
+Binary heap organized by listen time
+array or vector ordered by song id
+
+
+driver:
+	it should work on the surface ie: if i enter something it should print out the response without showing any error
+
+node:
+	implementations etc
+
+bst:
+	implementations etc 
+	binary heap should be max heap
+	

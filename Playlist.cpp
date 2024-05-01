@@ -4,141 +4,163 @@
 using namespace std;
 
 Playlist::Playlist(){
-	array=new Song[2];
-	size=1;
-	capacity=size;
-	id=0;
-	title="";
+	root=nullptr;
 }
-// Copy constructor
-Playlist::Playlist(const Playlist& origObject) {
-   size = origObject.size;
-	capacity = origObject.capacity;
-
-	// Allocate memory for the array
-	array = new Song[size];
-
-	// Copy each song from the original array to the new array
-	for (int i = 0; i < size-capacity; ++i) {
-		array[i] = origObject.array[i];
-	}
-}
-// Copy assignment 
-Playlist& Playlist::operator=(const Playlist& other) {
-	if (this != &other) {
-		size = other.size;
-		capacity = other.capacity;
-
-		delete[] array;
-		
-		array = new Song[capacity];
-
-		for (int i = 0; i < size; ++i) {
-			array[i] = other.array[i];
-		}
-	}
-	return *this;
-}
-
 // Destructor
 Playlist::~Playlist() {
-   delete[] array;
+   del(root);
 }
-
-int Playlist::getSize() {
-	return size-capacity;
+void Playlist::del(Song* song) {
+    if (song != nullptr) {
+        clear(song->left);
+        clear(song->right);
+        delete song;
+    }
 }
-int Playlist::getCap() {
-	return capacity;
-}
-bool Playlist::has(Song song){
-	for(int i=0;i<size-capacity;i++){
-		if(array[i].getId()==song.getId()){
-			return true;
+Song* Playlist::getSong(String title){
+	Song*curr=root;
+	while(curr!=nullptr){
+		if(title==curr.title){
+			return curr;
+		}
+		else if(title<curr->key){
+			curr=curr->left;
+		}
+		else{
+			curr=curr->right;
 		}
 	}
-	return false;
+	return nullptr;
 }
-void Playlist::add(Song song){
-	//cout<<"adding song "<<song.getId()<<endl;
-	int orig=size;
-	if(capacity<1){
-		capacity=capacity+size;
-		size*=2;
-		Song* arr= new Song[size];
-		for(int i=0;i<orig;++i){
-			arr[i]=array[i];
-		}
-		delete[] array;
-		array=arr;
+void Playlist::insert(Song song){
+	if(root==nullptr){
+		root=song;
 	}
-	int index=0;
-	bool max=true;
-	for(int i=0;i<orig;i++){
-		if(array[i].getId()>song.getId()){
-			index=i;
-			max=false;
-			i+=orig;
-		}
-	}
-	if(max){index=size-capacity;}
-	if(size>1&&!max){
-		for(int i=size-capacity-1;i>=index;i--){
-			//cout<<i<<endl;
-			//cout<<array[i].getId()<<endl;
-			//cout<<"shift"<<endl;
-			array[i+1]=array[i];
+	else{
+		Song*current=root;
+		while(current!=nullptr){
+			if(song.title<current.title){
+				if(current->left==nullptr){
+					current->left=song;
+					current=nullptr;
+				}else{
+					current=current->left;	
+				}
+			}
+			else{
+				if(current->right==nullptr){
+					current->right=node;
+					current=nullptr;
+				}else{
+					current=current->right;
+				}
+			}
 		}
 	}
-	array[index]=song;
-	capacity--;
-}
-Song Playlist::getSong(int index){
-	return array[index];
-}
-void Playlist::del(int index){
-	if(size==1){
-		capacity=1;
-		return;
-	}
-	for(int i=index+1;i<size-capacity;i++){
-		array[i-1]=array[i];
-	}
-	capacity++;
 }
 void Playlist::remove(Song song){
-	if(size==1){
-		capacity=1;
-		return;
-	}
-	int index=0;
-	for(int i=0;i<size-capacity;i++){
-		if(array[i].getId()==song.getId()){
-			index=i;
+	song par=nullptr; //parent
+	song curr=root;
+	while(curr!=nullptr){ //search
+		if(curr.title==song.title){ //found
+			if(curr->left==nullptr && curr->right==nullptr){//if node is leaf
+				if(par==nullptr){ //root
+					root=nullptr;
+				}
+				else if(par->left==curr)
+					par->left=nullptr;
+				else if(par->right==curr)
+					par->right=nullptr;
+			}
+			else if(curr->right==nullptr){//w left child
+				if(par==nullptr){
+					root=curr->left;
+				}
+				else if(par->left==curr)
+					par->left=cur->left;
+				else
+					par->right=cur->left;
+			}
+			else if(curr->left==nullptr){//w right child
+				if(par==nullptr){
+					root=curr->right;
+				}
+				else if(par->right==curr)
+					par->right=cur->right;
+				else
+					par->left=cur->right;
+			}
+			else{//two children
+				Song*suc=curr->right;
+				while(suc->left!=nullptr){
+					suc=suc->left;
+				}
+				string successordata=suc.title;
+				remove(suc);
+				curr.title=successordata;
+			}
+		}
+		else if (curr.title<song.title){
+			par=curr;
+			curr=curr->right;
+		}else{
+			par=curr;
+			curr=curr->left;
 		}
 	}
-	for(int i=index+1;i<size-capacity;i++){
-		array[i-1]=array[i];
+}
+void Playlist::heapify(){
+	
+}
+void Playlist::percUp(int i){
+	int parenti=0;
+	while(i>0){
+		parenti=(i-1/2);
+		if(heap[i]<=heap[parenti]){
+			heap[i].heapIndex=i;
+			return;
+		}else{
+			Song temp=heap[i];
+			heap[i]=heap[parenti];
+			heap[parenti]=temp;
+			i=parenti;
+		}
 	}
-	capacity++;
 }
-void Playlist::setId(int idin){
-	id=idin;
+void Playlist::insertHeap(Song song){
+	heap.push_back(song);
+	percUp(song);
 }
-Song Playlist::at(int index){
-	return array[index];
-}
-void Playlist::setTitle(string ti){
-	title=ti;
-}
-void Playlist::show(){
-	for(int i=0;i<size-capacity;i++){
-		array[i].show();
+void Playlist::percDown(int i){
+	int childi=2*i+1;
+	Song value=heap[i];
+	while(childi<heap.size()){
+		int max=value.Time();
+		int maxi=-1;
+		for(i=0;i<2&&i+childi<heap.size();++i){
+			if(heap[i+childi]->maxValue){
+				max=heap[i+childi].Time();
+				maxi=i+childi;
+			}
+		}
+		if(max==value.Time()){
+			heap[i].heapIndex=i;
+			return;
+		}
+		else{
+			Song temp=heap[i];
+			heap[i]=heap[maxi];
+			heap[maxi]=temp;
+			i=maxi;
+			childi=2*i+1;
+		}
 	}
 }
-int Playlist::getId(){
-	return id;
-}
-string Playlist::getTitle(){
-	return title;
+void Playlist::show(Song*rootInput){ //always input the tree's root to start recursive
+	if(rootInput==null){
+		return;
+	}
+	show(rootInput->left);
+	rootInput.show();
+	show(rootInput->right);
 }

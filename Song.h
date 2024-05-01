@@ -5,25 +5,32 @@ using namespace std;
 
 class Song {
    public:
-      Song(int idin, string titlein, int timein, string artistin);
-      Song();
-		Song& operator=(const Song& objToCopy); //copy assignment operator
-		~Song();
+    Song(Song* parentin,Song* lef,Song* righ, string titlein, int timein,int idin);
+	Song();
+	
+	void setTitle(string newtitle);
+	string Title();
+	void setTime(int newtime);
+	int Time();
+	void setId(int idin);
+	int Id();
+	string show();
 
-		int getId();
-		string getTitle();
-		string getArt();
-		int getTime();
+	
+	
+	
+	int heapIndex=0;
 
-		void show();
-		void setTitle(string titlein);
-		void setArt(string artin);
-		void setTime(int timein);
+	
+	Song* parent;
+	Song* left;
+	Song* right;
+	bool remove=false;
+	bool favorite=false;
 	private:
-      string title;
-		int time;
-      string artist;
-		int id;
+ 
+	string title;
+	int runningtime;
+	int id;
 
 };
-

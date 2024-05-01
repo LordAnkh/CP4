@@ -3,57 +3,48 @@
 #include "Song.h"
 using namespace std;
 
-Song::Song(int idin, string titlein, int timein, string artistin){
-   id=idin;
-	title=titlein;
-	time=timein;
-	artist=artistin;
+Song::Song(Song* parentin,Song* lef,Song* righ, string titlein, int timein,int idin)
+{
+parent=parentin;
+left=lef;
+right=righ;
+title=titlein;
+runningtime=timein;
+id=idin;
 }
 Song::Song(){
-   id=0;
-	title="";
-	time=0;
-	artist="";
+parent=nullptr;
+left=nullptr;
+right=nullptr;
+id=0;
+title="";
+runningtime=0;
 }
-// Copy assignment 
-Song& Song::operator=(const Song& other) {
-	if (this != &other) {
-        // Copy data members from other to the current object
-        this->id = other.id;
-        this->title = other.title;
-        this->time = other.time;
-        this->artist = other.artist;
-    }
-    return *this;
-}
-
-// Destructor
-Song::~Song() {
-}
-
-int Song::getId() {
-	return id;
-}
-string Song::getTitle() {
-	return title;
-}
-int Song::getTime() {
-	return time;
-}
-string Song::getArt() {
-	return artist;
-}
-void Song::show() {
-	cout << "song " << id << " " << title << " by " << artist << endl;
-}
-void Song::setTitle(string titlein) {
-	title=titlein;
-}
-void Song::setTime(int timein) {
-	time=timein;
-}
-void Song::setArt(string artistin) {
-	artist=artistin;
-}
-
-
+	void Song::setTitle(string newtitle)
+	{
+		title=newtitle;
+	}
+	string Song::Title()
+	{
+		return title;
+	}
+	void Song::setTime(int newtime)
+	{
+		runningtime=newtime;
+	}
+	int Song::Time()
+	{
+		return runningtime;
+	}
+	void Song::setId(int idin)
+	{
+		id=idin;
+	}
+	int Song::Id()
+	{
+		return id;
+	}
+	string Song::show()
+	{
+	cout<< id<<" "<<title<<" has been listened to for "<<runningtime<< " seconds"<<endl; 
+	}

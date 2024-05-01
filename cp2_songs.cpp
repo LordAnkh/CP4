@@ -208,6 +208,9 @@ int main(int argc, char *argv[]) {
 			}
 			//inputWords.clear();
 		}
+		else if(inputWords[0] == "show_listen_time" && inputWords.size()>=2){
+			
+		}
 		else if(input!= " "){
 			cout << "Command not recognized, please try again." << endl;
 			//inputWords.clear();
