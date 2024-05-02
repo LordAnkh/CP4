@@ -20,16 +20,16 @@ class Playlist{
 		int getIdIndex(Song* song);
 
 		//binary heap funcs
-		void heapify();
+		void heapify(int i);
 		void heapRemove(int i);
-		void percUp(int i); //item at i gets percolated up
+		int percUp(int i); //item at i gets percolated up
 		void insertHeap(Song& song);
-		void percDown(int i); //item at i getes percolated down
+		int percDown(int i); //item at i getes percolated down
 		
 		void show(Song*root); //inorder traversal
 		Song* root;
 		//Song* copy();
-		vector<Song> heap;
+		vector<Song*> heap;
 		
 };
 
