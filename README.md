@@ -46,3 +46,6 @@ apr 30-1
 		cout << "Command not recognized, please try again." << endl;
 		//inputWords.clear();
 	}
+
+	finished testing with TA provided tests. not sure how to test if an operation is in o(logn) time. will ask TA at lab later
+	
