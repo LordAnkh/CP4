@@ -11,4 +11,5 @@ apr 28
 	- song class (node)
 		
 	- driver file
-		
+apr 30-1
+	compiling and testing
