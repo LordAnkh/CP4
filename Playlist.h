@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
+#include <vector>
 #include "Song.h"
 
 using namespace std;
@@ -12,22 +13,23 @@ class Playlist{
 		*/
 		~Playlist();
 
-		Song* getSong(String title);
-		void insert(Song song);
+		void clear(Song* song);
+		Song* getSong(string title);
+		void insert(Song* song);
 		void remove(Song song);
-		int getIdIndex(Song song);
+		int getIdIndex(Song* song);
 
 		//binary heap funcs
-		void heapify();
-		void percUp(int i);
-		void insertHeap(Song song);
-		void percDown(int i);
+		void heapify(int i);
+		void heapRemove(int i);
+		int percUp(int i); //item at i gets percolated up
+		void insertHeap(Song& song);
+		int percDown(int i); //item at i getes percolated down
 		
-		void show(); //inorder traversal
-		//Song* copy();
-	private:
+		void show(Song*root); //inorder traversal
 		Song* root;
-		vector<Song> heap;
+		//Song* copy();
+		vector<Song*> heap;
 		
 };
 

@@ -3,11 +3,11 @@
 #include "Song.h"
 using namespace std;
 
-Song::Song(Song* parentin,Song* lef,Song* righ, string titlein, int timein,int idin)
+Song::Song(string titlein, int timein,int idin)
 {
-parent=parentin;
-left=lef;
-right=righ;
+parent=nullptr;
+left=nullptr;
+right=nullptr;
 title=titlein;
 runningtime=timein;
 id=idin;
@@ -44,7 +44,7 @@ runningtime=0;
 	{
 		return id;
 	}
-	string Song::show()
+	void Song::show()
 	{
 	cout<< id<<" "<<title<<" has been listened to for "<<runningtime<< " seconds"<<endl; 
 	}
