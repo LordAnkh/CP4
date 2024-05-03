@@ -92,6 +92,24 @@ favorite
 quit
 "
 
+tests[6]="
+song 1 h 1 h
+song 2 j 2 j
+song 3 k 3 k
+song 4 l 4 l 
+song 5 q 5 q 
+song 6 w 6 w
+song 7 e 7 e
+song 8 r 8 r
+show_listen_time
+listen r 20000
+listen j 90
+listen k 8000
+favorite
+favorite
+favorite
+quit
+"
 
 # ================================================================================================
 # Expected outputs of above test-commands
@@ -170,6 +188,12 @@ Song F added to list of favorites (Listened for 600 seconds)
 Song G added to list of favorites (Listened for 500 seconds)
 Song A added to list of favorites (Listened for 400 seconds)
 Song C added to list of favorites (Listened for 300 seconds)
+"
+
+expected_outputs[6]="
+[ Test-case 6 : Listen to songs, remove a subset, and favorite ]
+
+
 "
 
 # INTERACTION

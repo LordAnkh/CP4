@@ -113,9 +113,7 @@ int main(int argc, char *argv[]) {
 				listen= stoi(inputWords[3]);
 				min = listen/60;
 				sec = listen % 60;
-			} catch (...) {
-				std::cout << "Invalid input." << std::endl;
-			}
+				
 			Song*newSong=new Song();
 			newSong->setId(id);
 			newSong->setTitle(inputWords[4]);
@@ -125,9 +123,12 @@ int main(int argc, char *argv[]) {
 			//cout<<newSong->heapIndex<<endl;
 			cout<<"new song "<<id<<" "<<inputWords[4]<<" by "<<inputWords[2]<<" "<<min<<":"<<sec;
 			if(sec==0){cout<<0;}cout<<endl;
+			} catch (...) {
+				std::cout << "Invalid input." << std::endl;
+			}
 		}
 		else if(inputWords[0] == "remove" && inputWords.size()>=2){
-			cout << "removing song " << inputWords[1] << endl;
+			//cout << "removing song " << inputWords[1] << endl;
 			Song *getSong=songsByTitle->getSong(inputWords[1]);
 			if(getSong!=nullptr){
 				int vecIndex=getSong->vecIndex;
@@ -141,7 +142,13 @@ int main(int argc, char *argv[]) {
 				songsByTitle->heapRemove(getSong->heapIndex);
 				//cout<<"heap sizeaf "<<songsByTitle->heap.size()<<endl;
 				//cout<<"heapsize "<<songsByTitle->heap.size()<<endl;
+				if(getSong->favorite){
+					cout << "Removed " << inputWords[1]<<" from your favorites" << endl;
+				}else{
+					cout << "Removed " << inputWords[1]<<" from your songs" << endl;
+				}
 				songsByTitle->remove(*getSong);
+				
 			}else{cout<<inputWords[1]<<" is not a valid song"<<endl;}
 			//cout<<allIds<<endl;
 		}
@@ -190,16 +197,25 @@ int main(int argc, char *argv[]) {
 				//}
 				if(!favorite){
 					//cout<<newSong->Title()<<" "<<newSong->heapIndex<<endl;
+					/*cout<<"heap to be changed: ";
+					for(int i=0;i<songsByTitle->heap.size();i++){
+						cout<<songsByTitle->heap[i]->Title()<<":"<<songsByTitle->heap[i]->heapIndex<<" ";
+					}cout<<endl;*/
 					songsByTitle->heapRemove(songsByTitle->getSong(inputWords[1])->heapIndex);
+					
 					songsByTitle->insertHeap(*songsByTitle->getSong(inputWords[1]));
 					/*for(int i=0;i<songsByTitle->heap.size();i++){
 						cout<<songsByTitle->heap[i]->Title()<<":"<<songsByTitle->heap[i]->heapIndex<<" ";
-					}
-					cout<<endl;*/
-					//cout<<newSong->Title()<<" "<<newSong->heapIndex<<endl;
+					}cout<<endl;*/
+					//cout<<newSong->Title()<<" "<<newSong->Time()<<endl;
 					//cout<<"after add heap "<<newSong->heapIndex<<endl;
 					//cout<<"heap size "<<songsByTitle->heap.size()<<endl;
+					/*cout<<"heap after: ";
+					for(int i=0;i<songsByTitle->heap.size();i++){
+						cout<<songsByTitle->heap[i]->Title()<<":"<<songsByTitle->heap[i]->heapIndex<<" ";
+					}cout<<endl;*/
 					cout<<"Listened to "<<inputWords[1]<<" for "<<inputWords[2]<<" seconds."<<endl;
+					
 				}else{
 					cout<<"Song "<<inputWords[1]<<" is a favorite."<<endl;
 				}

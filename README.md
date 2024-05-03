@@ -48,4 +48,6 @@ apr 30-1
 	}
 
 	finished testing with TA provided tests. not sure how to test if an operation is in o(logn) time. will ask TA at lab later
-	
+
+	>>removing favorited songs the same way as regular songs, but changing the cout output based on that isFavorite attribute
+		"Removed Diamonds on the Souls of her Shoes from your favorites"

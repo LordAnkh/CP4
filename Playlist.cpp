@@ -141,33 +141,31 @@ int Playlist::percUp(int i){
 	while (i > 0) {
 		//cout<<"index get "<<i<<endl;
 		int parenti = (i - 1) / 2; // Calculate the parent index
-
 		// If the current node is not greater than its parent, stop percolating
+		//cout<<heap.size()<<endl;
+		//cout<<i<<":curr "<<heap[i]->Title()<<endl;
+		//cout<<parenti<<":parent "<<heap[parenti]->Title()<<endl;
 		if (heap[i]->Time() <= heap[parenti]->Time()) {
 			heap[i]->heapIndex = i;
-			//cout<<"ins "<<heap[i]->Time()<<endl;
-			//cout<<"comp "<<heap[parenti]->Time()<<endl;
-			//cout<<"ind "<<i<<endl;
+			heap[parenti]->heapIndex = parenti;
 			return heap[i]->heapIndex; // Exit the loop as the heap property is satisfied
+		}else{
+			Song* temp=heap[i];
+			heap[i]=heap[parenti];
+			heap[parenti]=temp;
+			heap[i]->heapIndex = i;
+			heap[parenti]->heapIndex = parenti;
+
+			i = parenti;
 		}
-
-		// Swap the current node with its parent
-		Song* temp=heap[i];
-		heap[i]=heap[parenti];
-		heap[parenti]=temp;
-		// Update the heap index for both swapped nodes
-		heap[i]->heapIndex = i;
-		heap[parenti]->heapIndex = parenti;
-
-		// Move up to the parent index for the next iteration
-		i = parenti;
     }
 	return 0;
 }
 void Playlist::insertHeap(Song& song){
 	heap.push_back(&song);
 	song.heapIndex=heap.size()-1;
-	song.heapIndex=percUp(song.heapIndex);
+	int newIndex=percUp(song.heapIndex);
+   song.heapIndex = newIndex;
 	//cout<<"index get "<<song.heapIndex<<endl;
 }
 int Playlist::percDown(int i){
@@ -175,7 +173,7 @@ int Playlist::percDown(int i){
 	Song* value=heap[i];
 	while(childi<heap.size()){
 		int max=value->Time();
-		int maxi=-1;
+		int maxi=i;
 		for(int j=0;j<2&&j+childi<heap.size();++j){
 			if(heap[j+childi]->Time()>=max){
 				max=heap[j+childi]->Time();
@@ -210,20 +208,29 @@ void Playlist::heapRemove(int i) {
         return;
     }
 	//cout<<"check"<<endl;
+	//cout<<"tbr "<<i<<endl;
 	heap[i] = heap.back();
 	heap[i]->heapIndex = i;
 	heap.pop_back();
+	if(i==heap.size()){
+		i--;
+	}
+	
 	if (heap.empty()) {
 		return; // If the heap is empty after removal
 	}
 	if (i > 0 && heap[i]->Time() < heap[(i - 1) / 2]->Time()) {
+		//cout<<1<<endl;
 		percDown(i);
-	} else if(i>0 && heap[i]->Time() > heap[(i - 1) / 2]->Time()){
+	} else if(i>0 && heap[i]->Time() > heap[(i - 1) / 2]->Time()){	
+		//cout<<2<<endl;
 		percUp(i);
 	}else if (i==0&&heap.size()>1&&heap[i+1]->Time()>heap[i]->Time()){
+		//cout<<3<<endl;
 		percDown(i);
 	}
 	else if (i==0&&heap.size()>=3&&heap[i+2]->Time()>heap[i]->Time()){
+		//cout<<4<<endl;
 		int childi=2*i+2;
 		for(childi;childi<heap.size() && heap[childi]->Time()>heap[i]->Time();childi=childi*2+1){
 			Song*temp=heap[i];
@@ -236,7 +243,7 @@ void Playlist::heapRemove(int i) {
 	/*for(int i=0;i<heap.size();i++){
 		cout<<heap[i]->Title()<<":"<<heap[i]->heapIndex<<" ";
 	}
-	cout<<endl;	*/
+	cout<<endl;*/
 }
 void Playlist::show(Song*rootInput){ //always input the tree's root to start recursive
 	if(rootInput==nullptr){
